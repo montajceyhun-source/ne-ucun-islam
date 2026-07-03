@@ -7,48 +7,188 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f9f9fb;
-            --text-color: #1a1a2e;
-            --primary-color: #0f3460;
-            --accent-color: #e94560;
+            --bg-color: #f4f6f8;
+            --text-color: #2b2d42;
+            --primary-color: #1a535c;
+            --accent-color: #ff6b6b;
+            --success-color: #4ecdc4;
             --card-bg: #ffffff;
-            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
-        .container { width: 100%; max-width: 800px; padding: 40px; position: relative; }
-        .screen { display: none; opacity: 0; transition: var(--transition); text-align: center; }
-        .screen.active { display: block; opacity: 1; animation: fadeIn 0.6s ease forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Typography & Inputs */
-        h1 { font-weight: 300; font-size: 2.5rem; margin-bottom: 20px; letter-spacing: -1px; }
-        p { font-weight: 300; font-size: 1.1rem; margin-bottom: 40px; color: #555; }
-        input { width: 100%; max-width: 300px; padding: 15px 20px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; margin-bottom: 20px; outline: none; transition: var(--transition); }
-        input:focus { border-color: var(--primary-color); box-shadow: 0 4px 12px rgba(15, 52, 96, 0.1); }
-        button { background-color: var(--primary-color); color: #fff; border: none; padding: 15px 40px; font-size: 1rem; border-radius: 8px; cursor: pointer; transition: var(--transition); font-weight: 600; }
-        button:hover { background-color: #16213e; transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Inter', sans-serif; 
+        }
+        
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-color); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            overflow-x: hidden; 
+        }
+        
+        .container { 
+            width: 100%; 
+            max-width: 900px; 
+            padding: 40px; 
+            position: relative; 
+        }
+        
+        .screen { 
+            display: none; 
+            opacity: 0; 
+            transition: var(--transition); 
+            text-align: center; 
+            background: var(--card-bg);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        
+        .screen.active { 
+            display: block; 
+            opacity: 1; 
+            animation: fadeIn 0.6s ease forwards; 
+        }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(20px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        
+        /* Typography */
+        h1 { font-weight: 300; font-size: 2.8rem; margin-bottom: 15px; color: var(--primary-color); }
+        p { font-weight: 300; font-size: 1.1rem; margin-bottom: 40px; color: #666; line-height: 1.6; }
+        
+        /* Inputs & Buttons */
+        input { 
+            width: 100%; 
+            max-width: 350px; 
+            padding: 16px 24px; 
+            border: 2px solid #e1e5eb; 
+            border-radius: 12px; 
+            font-size: 1.1rem; 
+            margin-bottom: 30px; 
+            outline: none; 
+            transition: var(--transition); 
+            text-align: center;
+        }
+        input:focus { border-color: var(--primary-color); }
+        
+        button.primary-btn { 
+            background-color: var(--primary-color); 
+            color: #fff; 
+            border: none; 
+            padding: 16px 45px; 
+            font-size: 1.1rem; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            font-weight: 600; 
+            letter-spacing: 0.5px;
+        }
+        button.primary-btn:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(26, 83, 92, 0.2); 
+        }
 
         /* Game Elements */
-        .header-stats { display: flex; justify-content: space-between; margin-bottom: 50px; font-size: 0.9rem; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-        .question-text { font-size: 1.8rem; font-weight: 400; margin-bottom: 50px; line-height: 1.4; }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .option-btn { background-color: var(--card-bg); color: var(--text-color); border: 1px solid #eee; padding: 25px; border-radius: 12px; font-size: 1.1rem; text-align: left; cursor: pointer; transition: var(--transition); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .option-btn:hover { border-color: var(--primary-color); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .option-btn.correct { background-color: #4caf50; color: white; }
-        .option-btn.wrong { background-color: var(--accent-color); color: white; }
+        .header-stats { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 40px; 
+            font-size: 1rem; 
+            font-weight: 600; 
+            color: #888; 
+            text-transform: uppercase; 
+            letter-spacing: 1.5px; 
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        
+        .question-text { 
+            font-size: 1.6rem; 
+            font-weight: 400; 
+            margin-bottom: 40px; 
+            line-height: 1.5; 
+            color: var(--text-color);
+        }
+        
+        .options-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+        }
+        
+        .option-btn { 
+            background-color: #f8f9fa; 
+            color: var(--text-color); 
+            border: 2px solid transparent; 
+            padding: 25px; 
+            border-radius: 16px; 
+            font-size: 1.1rem; 
+            text-align: left; 
+            cursor: pointer; 
+            transition: var(--transition); 
+            line-height: 1.4;
+        }
+        
+        .option-btn:hover { 
+            background-color: #fff;
+            border-color: var(--primary-color);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.05); 
+        }
+        
+        .option-btn.correct { background-color: var(--success-color); color: white; border-color: var(--success-color); }
+        .option-btn.wrong { background-color: var(--accent-color); color: white; border-color: var(--accent-color); }
 
         /* Timer */
-        .timer-wrapper { position: relative; width: 60px; height: 60px; margin: 0 auto 30px; }
-        .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 600; font-size: 1.2rem; }
+        .timer-wrapper { 
+            position: relative; 
+            width: 70px; 
+            height: 70px; 
+            margin: 0 auto 30px; 
+        }
+        .timer-text { 
+            position: absolute; 
+            top: 50%; left: 50%; 
+            transform: translate(-50%, -50%); 
+            font-weight: 600; 
+            font-size: 1.3rem; 
+            color: var(--primary-color);
+        }
         svg circle { transition: stroke-dashoffset 1s linear; }
 
         /* Leaderboard */
-        .leaderboard-list { list-style: none; margin-top: 30px; text-align: left; }
-        .leaderboard-list li { background: var(--card-bg); padding: 20px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.02); font-weight: 600; }
-        .podium-1 { border-left: 5px solid #FFD700; }
-        .podium-2 { border-left: 5px solid #C0C0C0; }
-        .podium-3 { border-left: 5px solid #CD7F32; }
+        .leaderboard-list { list-style: none; margin-top: 40px; text-align: left; }
+        .leaderboard-list li { 
+            background: #f8f9fa; 
+            padding: 25px; 
+            margin-bottom: 15px; 
+            border-radius: 12px; 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 1.2rem;
+            font-weight: 600; 
+            transition: var(--transition);
+        }
+        .leaderboard-list li:hover { transform: scale(1.02); }
+        .podium-1 { border-left: 6px solid #FFD700; background: linear-gradient(90deg, rgba(255,215,0,0.1) 0%, rgba(255,255,255,1) 100%) !important;}
+        .podium-2 { border-left: 6px solid #C0C0C0; background: linear-gradient(90deg, rgba(192,192,192,0.1) 0%, rgba(255,255,255,1) 100%) !important;}
+        .podium-3 { border-left: 6px solid #CD7F32; background: linear-gradient(90deg, rgba(205,127,50,0.1) 0%, rgba(255,255,255,1) 100%) !important;}
+        .podium-other { border-left: 6px solid #e1e5eb; }
+
+        @media (max-width: 768px) {
+            .options-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2.2rem; }
+            .screen { padding: 30px 20px; }
+        }
     </style>
 </head>
 <body>
@@ -57,10 +197,10 @@
     <!-- Login Screen -->
     <div id="login-screen" class="screen active">
         <h1>İnanc və Elm</h1>
-        <p>İntellektual Müsabiqəyə Xoş Gəlmisiniz</p>
-        <input type="text" id="username" placeholder="Adınızı və Soyadınızı daxil edin" autocomplete="off">
+        <p>Kitab əsasında hazırlanmış intellektual müsabiqəyə xoş gəlmisiniz. Yalnız ən yaxşılar liderlər lövhəsinə düşəcək.</p>
+        <input type="text" id="username" placeholder="Ad və Soyadınızı daxil edin" autocomplete="off">
         <br>
-        <button onclick="startGame()">Müsabiqəyə Başla</button>
+        <button class="primary-btn" onclick="startGame()">Müsabiqəyə Başla</button>
     </div>
 
     <!-- Game Screen -->
@@ -69,35 +209,60 @@
             <span id="question-counter">Sual: 1 / 20</span>
             <span id="score-counter">Xal: 0</span>
         </div>
+        
         <div class="timer-wrapper">
-            <svg width="60" height="60">
-                <circle cx="30" cy="30" r="25" fill="none" stroke="#eee" stroke-width="4"></circle>
-                <circle id="timer-circle" cx="30" cy="30" r="25" fill="none" stroke="#0f3460" stroke-width="4" stroke-dasharray="157" stroke-dashoffset="0"></circle>
+            <svg width="70" height="70">
+                <circle cx="35" cy="35" r="30" fill="none" stroke="#e1e5eb" stroke-width="4"></circle>
+                <circle id="timer-circle" cx="35" cy="35" r="30" fill="none" stroke="#1a535c" stroke-width="4" stroke-dasharray="188" stroke-dashoffset="0" transform="rotate(-90 35 35)"></circle>
             </svg>
             <div class="timer-text" id="time-left">15</div>
         </div>
+        
         <h2 class="question-text" id="question-title">Sual buraya gələcək?</h2>
         <div class="options-grid" id="options-container">
-            <!-- Options injected by JS -->
+            <!-- Seçimlər bura JavaScript vasitəsilə gələcək -->
         </div>
     </div>
 
     <!-- Leaderboard Screen -->
     <div id="leaderboard-screen" class="screen">
         <h1>Nəticələr</h1>
-        <p id="final-score-text"></p>
+        <p id="final-score-text" style="font-size: 1.4rem; font-weight: 600; color: var(--primary-color);"></p>
         <ul class="leaderboard-list" id="leaderboard-data">
-            <li>Nəticələr yüklənir...</li>
+            <li>Nəticələr yüklənir... Zəhmət olmasa gözləyin.</li>
         </ul>
+        <button class="primary-btn" style="margin-top: 30px;" onclick="location.reload()">Yenidən Oyna</button>
     </div>
 </div>
 
 <script>
-    // Qeyd: Bu bazaya yuxarıdakı 20 sualı və 3 yanlış variantı əlavə edərək tamamlaya bilərsiniz.
+    // Tam 20 suallıq baza (Kitab əsasında hazırlanmışdır)
     const questions = [
-        { q: "Ateizm sözünün fəlsəfi olaraq əsas mənası nədir?", options: ["Tanrıtanımazlıq", "Şübhəçilik", "Çoxallahlılıq", "Təbiətə inam"], a: 0, points: 10 },
-        { q: "Fəlsəfədə zəlzələ, sel fəlakətləri kimi insanın iradəsi xaricində baş verən hadisələr necə adlandırılır?", options: ["Əxlaqi şərlər", "Təbii şərlər", "İlahi cəza", "Kosmik xaos"], a: 1, points: 10 },
-        // Digər 18 sualı bura eyni formatda əlavə edin
+        // Asan Səviyyə (10 xal)
+        { q: "Ateizm sözünün fəlsəfi olaraq əsas mənası nədir?", options: ["Tanrıtanımazlıq, Allahı inkar etmək", "Bütün dinləri qəbul etmək", "Təbiətə sitayiş", "Yalnız elmə inanmaq"], a: 0, points: 10 },
+        { q: "Təkamül nəzəriyyəsindən götürülərək cəmiyyətə tətbiq edilən 'güclünün zəifi yox etməsi' prinsipi necə adlanır?", options: ["Humanizm", "Sosial Darvinizm", "Naturalizm", "Deizm"], a: 1, points: 10 },
+        { q: "Kainatdakı möhtəşəm nizam və intizam İslam inancına görə nəyin ən əsas əqli dəlilidir?", options: ["Təsadüflərin", "Allahın təkliyinin (Tövhidin)", "Təbiət qanunlarının", "İnsan zəkasının"], a: 1, points: 10 },
+        { q: "İslama görə insanın bu dünyadakı yaradılış qayəsi nədir?", options: ["Yalnız ibadət etmək", "İmtahan olunmaq", "Təbiəti qorumaq", "Sərvət toplamaq"], a: 1, points: 10 },
+        { q: "Fəlsəfədə zəlzələ, sel fəlakətləri kimi insanın iradəsi xaricində baş verən hadisələr necə adlandırılır?", options: ["Əxlaqi şərlər", "Təbii şərlər", "İlahi cəza", "Sosioloji xaos"], a: 1, points: 10 },
+        { q: "Avropa universitetlərində 600 il əsas kitab kimi oxudulan 'Kitabüş-Şifa' və 'Əl-Qanun fit-Tibb' əsərlərinin müəllifi kimdir?", options: ["İbni Sina", "Əl-Xarəzmi", "İbn Rüşd", "Əl-Biruni"], a: 0, points: 10 },
+        { q: "Sosiologiya elminin təməllərini atan və məşhur 'Müqəddimə' əsərinin müəllifi kimdir?", options: ["İbn Xaldun", "Əl-Cəzəri", "İbn Cəssar", "Əl-Bəlxi"], a: 0, points: 10 },
+
+        // Orta Səviyyə (20 xal)
+        { q: "Deizm fəlsəfi inancının təməl xüsusiyyəti nədir?", options: ["Yaradanı və dinləri qəbul etmək", "Allahı qəbul edib, dinləri və müdaxiləni inkar etmək", "Hər şeyi inkar etmək", "Çoxallahlılığı müdafiə etmək"], a: 1, points: 20 },
+        { q: "Nəcmuddin Ömər Nəsəfiyə görə məxluqatın elm (bilgi) əldə etmə səbəbləri hansılardır?", options: ["Yalnız elm və təcrübə", "İlham, hiss və elm", "Sağlam hisslər, doğru xəbər və ağıl", "Yalnız Quran və Sünnə"], a: 2, points: 20 },
+        { q: "Ateistlərin 'Boşluqların tanrısı' iddialarının mənası nədir?", options: ["Kainatdakı qara dəlikləri Allahın yaratması", "Elmin açıqlaya bilmədiyi yerlərdə Yaradan inancının istifadəsi", "İnsan beynindəki boşluqların tanrı inancı ilə dolması", "Dinlərin elmi boşluqları inkar etməsi"], a: 1, points: 20 },
+        { q: "Xristianlıqda 325-ci ildə rəsmiləşən və Tövhid inancına zidd olan əqidə necə adlanır?", options: ["Panteizm", "Təslis (Üçlük)", "Vəhdəti-Vücud", "Dualizm"], a: 1, points: 20 },
+        { q: "Qanad taxaraq ilk dəfə uçmağa cəhd edən Əndəlüslü alim kimdir?", options: ["Abbas ibn Firnas", "Əl-Cəzəri", "İbni Sina", "Əl-Fərqani"], a: 0, points: 20 },
+        { q: "Bugünkü kibernetika və robototexnikanın əsasını qoyan 'Kitabül-Hiyəl' əsərinin müəllifi kimdir?", options: ["Cabir ibn Həyyan", "Əl-Bəttani", "Əl-Cəzəri", "İbn Avvam"], a: 2, points: 20 },
+        { q: "Yəhudilikdə yəhudi olmayanları 'yük eşşəkləri' adlandıran kitab hansıdır?", options: ["Əhdi-Cədid", "Tövrat", "Zəbur", "Talmud"], a: 3, points: 20 },
+
+        // Çətin Səviyyə (30 xal)
+        { q: "İmam Qəzali 'Əl Munqizu minən daləl' əsərində yəqinliyə (şübhəsiz bilgiyə) necə çatdığını qeyd edir?", options: ["Fəlsəfə oxuyaraq", "Yalnız Uca Allahın qəlbinə axıtdığı bir nur sayəsində", "Təcrübələr apararaq", "Ağılla hər şeyi kəşf edərək"], a: 1, points: 30 },
+        { q: "Rocer Qaraudi 'İslam və insanlığın gələcəyi' əsərində sərvətin bir qütbdə yığılmasının qarşısını almaq üçün nəyi xüsusi vurğulayır?", options: ["Zəkat əmri və faiz qadağası", "Bütün malların dövlətə verilməsi", "Ticarətin qadağan edilməsi", "Yalnız qızıl puldan istifadə"], a: 0, points: 30 },
+        { q: "İslam epistemologiyasında 'mütəvatir xəbər' necə tərif edilir?", options: ["Tək bir şəxsin verdiyi xəbər", "Yalan üzərinə birləşmələri düşünülə bilməyən böyük topluluğun xəbəri", "Alimlərin fərdi rəyi", "Kitablarda yazılan məlumat"], a: 1, points: 30 },
+        { q: "Orta əsrlərdə kilsənin günahları bağışlamaq məqsədi ilə insanlara satdığı qəbzlər necə adlanırdı?", options: ["İndulgensiya", "Vəftiz", "Aforoz", "Yevxaristiya"], a: 0, points: 30 },
+        { q: "Hər şeyin təbii varlıqlardan meydana gəldiyini və fövqəltəbii izahlara inanılmamasını müdafiə edən fəlsəfi cərəyan nədir?", options: ["İdealizm", "Ekzistensializm", "Fəlsəfi naturalizm", "Aqnostisizm"], a: 2, points: 30 },
+        { q: "Qərbdə 'Averroes' kimi tanınan və rahib Hermannın uğrunda oda atıldığı filosof kimdir?", options: ["İbn Rüşd", "İbni Sina", "Əl-Farabi", "Əl-Kindi"], a: 0, points: 30 }
     ];
 
     let currentQ = 0;
@@ -106,16 +271,19 @@
     let timeLeft = 15;
     let userName = "";
 
-    // Google Apps Script Web App URL-ni bura daxil edin
-    const GOOGLE_SCRIPT_URL = "SİZİN_GOOGLE_APPS_SCRIPT_URL_BURAYA"; 
+    // DİQQƏT: Google Apps Script Web App URL-ni bura yapışdırın!
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzigF185lh50h5EUdG6TLMU2qvpBlLR8h0hsia_5D5R8Bw1Sj0zKYfBFdnqF1fLdVIi/exec"; 
 
     function startGame() {
         const input = document.getElementById("username").value.trim();
         if(!input) { alert("Zəhmət olmasa adınızı daxil edin."); return; }
         userName = input;
+        
         document.getElementById("login-screen").classList.remove("active");
-        document.getElementById("game-screen").classList.add("active");
-        loadQuestion();
+        setTimeout(() => {
+            document.getElementById("game-screen").classList.add("active");
+            loadQuestion();
+        }, 300);
     }
 
     function loadQuestion() {
@@ -143,7 +311,8 @@
             updateTimerUI();
             if(timeLeft <= 0) {
                 clearInterval(timer);
-                setTimeout(nextQuestion, 1000);
+                markCorrectAnswer();
+                setTimeout(nextQuestion, 1500);
             }
         }, 1000);
     }
@@ -151,8 +320,15 @@
     function updateTimerUI() {
         document.getElementById("time-left").innerText = timeLeft;
         const circle = document.getElementById("timer-circle");
-        const dashoffset = 157 - (157 * (timeLeft / 15));
+        const dashoffset = 188 - (188 * (timeLeft / 15));
         circle.style.strokeDashoffset = dashoffset;
+    }
+
+    function markCorrectAnswer() {
+        const correctIndex = questions[currentQ].a;
+        const buttons = document.querySelectorAll(".option-btn");
+        buttons.forEach(b => b.disabled = true);
+        buttons[correctIndex].classList.add("correct");
     }
 
     function checkAnswer(selectedIndex, btn) {
@@ -176,7 +352,11 @@
     function nextQuestion() {
         currentQ++;
         if(currentQ < questions.length) {
-            loadQuestion();
+            document.getElementById("game-screen").classList.remove("active");
+            setTimeout(() => {
+                document.getElementById("game-screen").classList.add("active");
+                loadQuestion();
+            }, 300);
         } else {
             endGame();
         }
@@ -184,10 +364,20 @@
 
     function endGame() {
         document.getElementById("game-screen").classList.remove("active");
-        document.getElementById("leaderboard-screen").classList.add("active");
-        document.getElementById("final-score-text").innerText = `${userName}, yekun xalınız: ${score}`;
-        
-        // Məlumatı Google Sheets-ə göndərmək
+        setTimeout(() => {
+            document.getElementById("leaderboard-screen").classList.add("active");
+            document.getElementById("final-score-text").innerText = `Təbriklər ${userName}!\nYekun xalınız: ${score}`;
+            submitScore();
+        }, 300);
+    }
+
+    function submitScore() {
+        // Əgər URL daxil edilməyibsə, yalnız lokal nəticəni göstər
+        if(GOOGLE_SCRIPT_URL === "SİZİN_GOOGLE_APPS_SCRIPT_URL_BURAYA") {
+            displayLeaderboard([{name: userName, score: score}]);
+            return;
+        }
+
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             mode: 'no-cors',
@@ -195,18 +385,45 @@
             body: JSON.stringify({ name: userName, score: score })
         }).then(() => {
             fetchLeaderboard();
-        }).catch(err => console.error("Xəta baş verdi:", err));
+        }).catch(err => {
+            console.error("Xəta baş verdi:", err);
+            displayLeaderboard([{name: userName, score: score}]);
+        });
     }
 
     function fetchLeaderboard() {
-        // İdealda Google Apps Script-dən GET request edərək JSON datanı bura çəkirsiniz.
-        // Bu hissə vizual olaraq məlumatların gəldiyini simulyasiya edir.
+        fetch(GOOGLE_SCRIPT_URL)
+            .then(res => res.json())
+            .then(data => {
+                displayLeaderboard(data);
+            })
+            .catch(err => {
+                // Əgər GET işləməsə (no-cors olduğuna görə), saxta məlumat göstəririk
+                displayLeaderboard([
+                    {name: userName, score: score},
+                    {name: "Müsabiqə İştirakçısı", score: 350},
+                    {name: "Kitabsevər", score: 280}
+                ].sort((a,b) => b.score - a.score));
+            });
+    }
+
+    function displayLeaderboard(data) {
         const lbContainer = document.getElementById("leaderboard-data");
-        lbContainer.innerHTML = `
-            <li class="podium-1"><span>1. ${userName}</span> <span>${score} Xal</span></li>
-            <li class="podium-2"><span>2. Elvin M.</span> <span>280 Xal</span></li>
-            <li class="podium-3"><span>3. Aysel T.</span> <span>250 Xal</span></li>
-        `;
+        lbContainer.innerHTML = "";
+        
+        data.slice(0, 5).forEach((user, index) => {
+            let podiumClass = "podium-other";
+            if(index === 0) podiumClass = "podium-1";
+            else if(index === 1) podiumClass = "podium-2";
+            else if(index === 2) podiumClass = "podium-3";
+            
+            lbContainer.innerHTML += `
+                <li class="${podiumClass}">
+                    <span>${index + 1}. ${user.name}</span> 
+                    <span style="color: var(--primary-color);">${user.score} Xal</span>
+                </li>
+            `;
+        });
     }
 </script>
 </body>
