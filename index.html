@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İnanc və Elm: İntellektual Müsabiqə</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f9f9fb;
+            --text-color: #1a1a2e;
+            --primary-color: #0f3460;
+            --accent-color: #e94560;
+            --card-bg: #ffffff;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+        .container { width: 100%; max-width: 800px; padding: 40px; position: relative; }
+        .screen { display: none; opacity: 0; transition: var(--transition); text-align: center; }
+        .screen.active { display: block; opacity: 1; animation: fadeIn 0.6s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Typography & Inputs */
+        h1 { font-weight: 300; font-size: 2.5rem; margin-bottom: 20px; letter-spacing: -1px; }
+        p { font-weight: 300; font-size: 1.1rem; margin-bottom: 40px; color: #555; }
+        input { width: 100%; max-width: 300px; padding: 15px 20px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; margin-bottom: 20px; outline: none; transition: var(--transition); }
+        input:focus { border-color: var(--primary-color); box-shadow: 0 4px 12px rgba(15, 52, 96, 0.1); }
+        button { background-color: var(--primary-color); color: #fff; border: none; padding: 15px 40px; font-size: 1rem; border-radius: 8px; cursor: pointer; transition: var(--transition); font-weight: 600; }
+        button:hover { background-color: #16213e; transform: translateY(-2px); box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+
+        /* Game Elements */
+        .header-stats { display: flex; justify-content: space-between; margin-bottom: 50px; font-size: 0.9rem; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .question-text { font-size: 1.8rem; font-weight: 400; margin-bottom: 50px; line-height: 1.4; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .option-btn { background-color: var(--card-bg); color: var(--text-color); border: 1px solid #eee; padding: 25px; border-radius: 12px; font-size: 1.1rem; text-align: left; cursor: pointer; transition: var(--transition); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .option-btn:hover { border-color: var(--primary-color); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .option-btn.correct { background-color: #4caf50; color: white; }
+        .option-btn.wrong { background-color: var(--accent-color); color: white; }
+
+        /* Timer */
+        .timer-wrapper { position: relative; width: 60px; height: 60px; margin: 0 auto 30px; }
+        .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 600; font-size: 1.2rem; }
+        svg circle { transition: stroke-dashoffset 1s linear; }
+
+        /* Leaderboard */
+        .leaderboard-list { list-style: none; margin-top: 30px; text-align: left; }
+        .leaderboard-list li { background: var(--card-bg); padding: 20px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; box-shadow: 0 2px 5px rgba(0,0,0,0.02); font-weight: 600; }
+        .podium-1 { border-left: 5px solid #FFD700; }
+        .podium-2 { border-left: 5px solid #C0C0C0; }
+        .podium-3 { border-left: 5px solid #CD7F32; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Login Screen -->
+    <div id="login-screen" class="screen active">
+        <h1>İnanc və Elm</h1>
+        <p>İntellektual Müsabiqəyə Xoş Gəlmisiniz</p>
+        <input type="text" id="username" placeholder="Adınızı və Soyadınızı daxil edin" autocomplete="off">
+        <br>
+        <button onclick="startGame()">Müsabiqəyə Başla</button>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+        <div class="header-stats">
+            <span id="question-counter">Sual: 1 / 20</span>
+            <span id="score-counter">Xal: 0</span>
+        </div>
+        <div class="timer-wrapper">
+            <svg width="60" height="60">
+                <circle cx="30" cy="30" r="25" fill="none" stroke="#eee" stroke-width="4"></circle>
+                <circle id="timer-circle" cx="30" cy="30" r="25" fill="none" stroke="#0f3460" stroke-width="4" stroke-dasharray="157" stroke-dashoffset="0"></circle>
+            </svg>
+            <div class="timer-text" id="time-left">15</div>
+        </div>
+        <h2 class="question-text" id="question-title">Sual buraya gələcək?</h2>
+        <div class="options-grid" id="options-container">
+            <!-- Options injected by JS -->
+        </div>
+    </div>
+
+    <!-- Leaderboard Screen -->
+    <div id="leaderboard-screen" class="screen">
+        <h1>Nəticələr</h1>
+        <p id="final-score-text"></p>
+        <ul class="leaderboard-list" id="leaderboard-data">
+            <li>Nəticələr yüklənir...</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    // Qeyd: Bu bazaya yuxarıdakı 20 sualı və 3 yanlış variantı əlavə edərək tamamlaya bilərsiniz.
+    const questions = [
+        { q: "Ateizm sözünün fəlsəfi olaraq əsas mənası nədir?", options: ["Tanrıtanımazlıq", "Şübhəçilik", "Çoxallahlılıq", "Təbiətə inam"], a: 0, points: 10 },
+        { q: "Fəlsəfədə zəlzələ, sel fəlakətləri kimi insanın iradəsi xaricində baş verən hadisələr necə adlandırılır?", options: ["Əxlaqi şərlər", "Təbii şərlər", "İlahi cəza", "Kosmik xaos"], a: 1, points: 10 },
+        // Digər 18 sualı bura eyni formatda əlavə edin
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+    let timer;
+    let timeLeft = 15;
+    let userName = "";
+
+    // Google Apps Script Web App URL-ni bura daxil edin
+    const GOOGLE_SCRIPT_URL = "SİZİN_GOOGLE_APPS_SCRIPT_URL_BURAYA"; 
+
+    function startGame() {
+        const input = document.getElementById("username").value.trim();
+        if(!input) { alert("Zəhmət olmasa adınızı daxil edin."); return; }
+        userName = input;
+        document.getElementById("login-screen").classList.remove("active");
+        document.getElementById("game-screen").classList.add("active");
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        clearInterval(timer);
+        timeLeft = 15;
+        updateTimerUI();
+        
+        const qData = questions[currentQ];
+        document.getElementById("question-counter").innerText = `Sual: ${currentQ + 1} / ${questions.length}`;
+        document.getElementById("question-title").innerText = qData.q;
+        
+        const optsContainer = document.getElementById("options-container");
+        optsContainer.innerHTML = "";
+        
+        qData.options.forEach((opt, index) => {
+            const btn = document.createElement("button");
+            btn.className = "option-btn";
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(index, btn);
+            optsContainer.appendChild(btn);
+        });
+
+        timer = setInterval(() => {
+            timeLeft--;
+            updateTimerUI();
+            if(timeLeft <= 0) {
+                clearInterval(timer);
+                setTimeout(nextQuestion, 1000);
+            }
+        }, 1000);
+    }
+
+    function updateTimerUI() {
+        document.getElementById("time-left").innerText = timeLeft;
+        const circle = document.getElementById("timer-circle");
+        const dashoffset = 157 - (157 * (timeLeft / 15));
+        circle.style.strokeDashoffset = dashoffset;
+    }
+
+    function checkAnswer(selectedIndex, btn) {
+        clearInterval(timer);
+        const correctIndex = questions[currentQ].a;
+        const buttons = document.querySelectorAll(".option-btn");
+        
+        buttons.forEach(b => b.disabled = true);
+        
+        if(selectedIndex === correctIndex) {
+            btn.classList.add("correct");
+            score += questions[currentQ].points;
+            document.getElementById("score-counter").innerText = `Xal: ${score}`;
+        } else {
+            btn.classList.add("wrong");
+            buttons[correctIndex].classList.add("correct");
+        }
+        setTimeout(nextQuestion, 1500);
+    }
+
+    function nextQuestion() {
+        currentQ++;
+        if(currentQ < questions.length) {
+            loadQuestion();
+        } else {
+            endGame();
+        }
+    }
+
+    function endGame() {
+        document.getElementById("game-screen").classList.remove("active");
+        document.getElementById("leaderboard-screen").classList.add("active");
+        document.getElementById("final-score-text").innerText = `${userName}, yekun xalınız: ${score}`;
+        
+        // Məlumatı Google Sheets-ə göndərmək
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name: userName, score: score })
+        }).then(() => {
+            fetchLeaderboard();
+        }).catch(err => console.error("Xəta baş verdi:", err));
+    }
+
+    function fetchLeaderboard() {
+        // İdealda Google Apps Script-dən GET request edərək JSON datanı bura çəkirsiniz.
+        // Bu hissə vizual olaraq məlumatların gəldiyini simulyasiya edir.
+        const lbContainer = document.getElementById("leaderboard-data");
+        lbContainer.innerHTML = `
+            <li class="podium-1"><span>1. ${userName}</span> <span>${score} Xal</span></li>
+            <li class="podium-2"><span>2. Elvin M.</span> <span>280 Xal</span></li>
+            <li class="podium-3"><span>3. Aysel T.</span> <span>250 Xal</span></li>
+        `;
+    }
+</script>
+</body>
+</html>
