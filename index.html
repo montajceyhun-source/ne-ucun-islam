@@ -174,15 +174,13 @@
     // DİQQƏT: BURAYA YENİ WEB APP URL-Nİ YAZIN
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwsr57tCsstsU_TX-eVoiXe3y1k73hExeeArJWMxZVtPzgcwF8hQZPa3uMUQ6p0RvOONg/exec"; 
 
-    // BÜTÜN CİHAZLAR ÜÇÜN UNİVERSAL .MP3 SƏSLƏRİ
+    // BÜTÜN SƏSLƏR (Formatları bütün cihazlar üçün uyğunlaşdırılıb)
     const soundCorrect = new Audio("https://www.myinstants.com/media/sounds/correct_1.mp3");
     const soundApplause = new Audio("https://www.myinstants.com/media/sounds/applause-3.mp3");
-    // Telefonlarda (iPhone/Android) problemsiz işləməsi üçün təmiz MP3 "tick" səsi
     const soundTick = new Audio("https://www.myinstants.com/media/sounds/tick.mp3"); 
     
     soundCorrect.volume = 0.6;
     soundApplause.volume = 0.7;
-    // Taymerin səsi istifadəçini yormaması üçün yüngül (0.3) edilib
     soundTick.volume = 0.3;
 
     let questions = [
@@ -250,6 +248,25 @@
         });
     }
 
+    // ƏN VACİB HİSSƏ: Brauzerləri məcbur edirik ki, istifadəçi düyməyə basanda bütün səsləri "Kiliddən çıxarsın"
+    function unlockAudio() {
+        const audios = [soundCorrect, soundApplause, soundTick];
+        audios.forEach(a => {
+            a.volume = 0; // Səssizcə başladırıq ki, eşidilməsin
+            let playPromise = a.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    a.pause();
+                    a.currentTime = 0;
+                }).catch(error => {});
+            }
+        });
+        // Səs səviyyələrini əvvəlki halına qaytarırıq
+        soundCorrect.volume = 0.6;
+        soundApplause.volume = 0.7;
+        soundTick.volume = 0.3;
+    }
+
     function startGame() {
         if(pinInput.value !== ADMIN_PIN) {
             showToast("Oyun şifrəsi yanlışdır! Təşkilatçıdan doğru şifrəni istəyin.");
@@ -259,10 +276,8 @@
         userName = nameInput.value.trim();
         randomizeQuestions(); 
         
-        // Brauzerlərdə (iPhone Safari) səsin aktiv olması üçün məcburi yükləmə
-        soundCorrect.load();
-        soundTick.load();
-        soundApplause.load();
+        // Səsləri kiliddən çıxarırıq (Xüsusilə iPhone və Chrome üçün)
+        unlockAudio();
         
         document.getElementById("login-screen").classList.remove("active");
         setTimeout(() => {
@@ -292,16 +307,17 @@
             optsContainer.appendChild(btn);
         });
 
-        // Saniyəölçən (Taymer)
         timer = setInterval(() => {
             timeLeft--;
             updateTimerUI();
             
-            // Hər saniyə vuran səs (Klonlama sayəsində kəsilmə baş vermir)
+            // Hər saniyə vuran səs (Artıq kopyalama - cloneNode yoxdur!)
             if(timeLeft > 0) {
-                let tickClone = soundTick.cloneNode();
-                tickClone.volume = 0.3;
-                tickClone.play().catch(()=>{});
+                soundTick.currentTime = 0;
+                let playPromise = soundTick.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {});
+                }
             }
 
             if(timeLeft <= 0) {
@@ -342,13 +358,13 @@
         buttons.forEach(b => b.disabled = true);
 
         if(userSelectedIndex === correctIndex) {
-            // DOĞRU CAVAB - Uğur səsi gəlir
             if(userSelectedIndex !== -1) buttons[userSelectedIndex].classList.add("correct");
             score += questions[currentQ].points;
             document.getElementById("score-counter").innerText = `Xal: ${score}`;
-            soundCorrect.play().catch(e => console.log(e)); 
+            
+            soundCorrect.currentTime = 0;
+            soundCorrect.play().catch(e => {}); 
         } else {
-            // SƏHV VƏ YA BOŞ CAVAB - Səs ləğv edildi, yalnız rəng dəyişir
             if(userSelectedIndex !== -1) {
                 buttons[userSelectedIndex].classList.add("wrong");
             }
@@ -405,24 +421,25 @@
         document.getElementById("final-score-text").innerText = `Təbriklər ${userName}!\nYekun xalınız: ${score}`;
         
         triggerConfetti();
-        soundApplause.play().catch(e => console.log(e));
+        soundApplause.currentTime = 0;
+        soundApplause.play().catch(e => {});
         
         fetchLeaderboard();
     }
 
     function submitScore() {
-        if(GOOGLE_SCRIPT_URL !== "BURAYA_YENİ_LINKI_YAPISDIRIN") {
+        if(GOOGLE_SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbwsr57tCsstsU_TX-eVoiXe3y1k73hExeeArJWMxZVtPzgcwF8hQZPa3uMUQ6p0RvOONg/exec") {
             fetch(GOOGLE_SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({ name: userName, score: score })
-            }).catch(err => console.error("Xəta:", err));
+            }).catch(err => {});
         }
     }
 
     function fetchLeaderboard() {
-        if(GOOGLE_SCRIPT_URL === "BURAYA_YENİ_LINKI_YAPISDIRIN") {
+        if(GOOGLE_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbwsr57tCsstsU_TX-eVoiXe3y1k73hExeeArJWMxZVtPzgcwF8hQZPa3uMUQ6p0RvOONg/exec") {
             displayLeaderboard([{name: userName, score: score}]);
             return;
         }
@@ -457,7 +474,7 @@
     }
 
     function shareResult() {
-        const text = encodeURIComponent(`"İnanc və Elm" intellektual müsabiqəsində ${score} xal topladım! Sən neçə xal toplaya bilərsən?`);
+        const text = encodeURIComponent(`"İnanc və Elm" intellektual müsabiqəsində ${score} xal topladım! Sən neçə xal topladın?`);
         window.open(`https://api.whatsapp.com/send?text=${text}`);
     }
 </script>
