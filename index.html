@@ -5,111 +5,121 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>İnanc və Elm: İntellektual Müsabiqə</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
         :root {
-            --bg-color: #f4f6f8;
-            --text-color: #2b2d42;
-            --primary-color: #1a535c;
-            --accent-color: #ff6b6b;
-            --success-color: #4ecdc4;
-            --card-bg: #ffffff;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --text-color: #1d1d1f;
+            --primary-color: #0071e3;
+            --accent-color: #ff3b30;
+            --success-color: #34c759;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         
         body { 
-            background-color: var(--bg-color); color: var(--text-color); 
-            display: flex; justify-content: center; align-items: center; 
+            background: linear-gradient(-45deg, #e0eafc, #cfdef3, #e2e2e2, #fdfbfb);
+            background-size: 400% 400%; animation: gradientBG 15s ease infinite;
+            color: var(--text-color); display: flex; justify-content: center; align-items: center; 
             min-height: 100vh; overflow-x: hidden; 
         }
+
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         
-        .container { width: 100%; max-width: 900px; padding: 40px; position: relative; }
+        .container { width: 100%; max-width: 900px; padding: 20px; position: relative; z-index: 10;}
         
         .screen { 
-            display: none; opacity: 0; transition: var(--transition); 
-            text-align: center; background: var(--card-bg);
-            padding: 50px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            display: none; opacity: 0; transition: var(--transition); text-align: center; 
+            background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5); padding: 50px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08);
         }
         
-        .screen.active { display: block; opacity: 1; animation: fadeIn 0.6s ease forwards; }
+        .screen.active { display: block; opacity: 1; animation: fadeIn 0.8s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
+        h1 { font-weight: 600; font-size: 2.5rem; margin-bottom: 15px; color: #1d1d1f; letter-spacing: -1px; }
+        p { font-weight: 400; font-size: 1.1rem; margin-bottom: 30px; color: #555; line-height: 1.6; }
         
-        h1 { font-weight: 300; font-size: 2.8rem; margin-bottom: 15px; color: var(--primary-color); }
-        p { font-weight: 300; font-size: 1.1rem; margin-bottom: 40px; color: #666; line-height: 1.6; }
-        
+        .input-group { margin-bottom: 25px; }
         input { 
-            width: 100%; max-width: 350px; padding: 16px 24px; 
-            border: 2px solid #e1e5eb; border-radius: 12px; 
-            font-size: 1.1rem; margin-bottom: 30px; outline: none; 
-            transition: var(--transition); text-align: center;
+            width: 100%; max-width: 350px; padding: 18px 24px; background: rgba(255, 255, 255, 0.9);
+            border: 2px solid transparent; border-radius: 14px; font-size: 1.1rem; outline: none; 
+            transition: var(--transition); text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            margin-bottom: 15px;
         }
-        input:focus { border-color: var(--primary-color); }
+        input:focus { border-color: var(--primary-color); background: #fff; box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.15); }
         
         button.primary-btn { 
-            background-color: var(--primary-color); color: #fff; border: none; 
-            padding: 16px 45px; font-size: 1.1rem; border-radius: 12px; 
+            background-color: var(--text-color); color: #fff; border: none; 
+            padding: 18px 50px; font-size: 1.1rem; border-radius: 30px; 
             cursor: pointer; transition: var(--transition); font-weight: 600; 
-            letter-spacing: 0.5px;
         }
-        button.primary-btn:hover { 
-            transform: translateY(-3px); box-shadow: 0 10px 20px rgba(26, 83, 92, 0.2); 
-        }
+        button.primary-btn:hover:not(:disabled) { background-color: #000; transform: scale(1.03); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
+        
+        /* Deaktiv edilmiş düymənin stili */
+        button:disabled { background-color: #ccc; color: #666; cursor: not-allowed; box-shadow: none; transform: none; }
 
         .header-stats { 
             display: flex; justify-content: space-between; margin-bottom: 40px; 
             font-size: 1rem; font-weight: 600; color: #888; text-transform: uppercase; 
-            letter-spacing: 1.5px; border-bottom: 1px solid #eee; padding-bottom: 15px;
+            letter-spacing: 1.5px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 15px;
         }
         
-        .question-text { font-size: 1.6rem; font-weight: 400; margin-bottom: 40px; line-height: 1.5; color: var(--text-color); }
-        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .question-text { font-size: 1.5rem; font-weight: 600; margin-bottom: 40px; line-height: 1.5; color: var(--text-color); }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         
         .option-btn { 
-            background-color: #f8f9fa; color: var(--text-color); border: 2px solid transparent; 
-            padding: 25px; border-radius: 16px; font-size: 1.1rem; text-align: left; 
-            cursor: pointer; transition: var(--transition); line-height: 1.4;
+            background-color: rgba(255, 255, 255, 0.8); color: var(--text-color); border: 2px solid transparent; 
+            padding: 20px; border-radius: 16px; font-size: 1.1rem; text-align: left; 
+            cursor: pointer; transition: var(--transition); line-height: 1.4; box-shadow: 0 4px 6px rgba(0,0,0,0.02);
         }
-        .option-btn:hover { background-color: #fff; border-color: var(--primary-color); box-shadow: 0 8px 15px rgba(0,0,0,0.05); }
+        .option-btn:hover { background-color: #fff; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
         .option-btn.correct { background-color: var(--success-color); color: white; border-color: var(--success-color); }
         .option-btn.wrong { background-color: var(--accent-color); color: white; border-color: var(--accent-color); }
 
         .timer-wrapper { position: relative; width: 70px; height: 70px; margin: 0 auto 30px; }
-        .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 600; font-size: 1.3rem; color: var(--primary-color); }
+        .timer-text { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-weight: 600; font-size: 1.3rem; color: var(--text-color); }
         svg circle { transition: stroke-dashoffset 1s linear; }
 
-        .leaderboard-list { list-style: none; margin-top: 40px; text-align: left; }
+        .leaderboard-list { list-style: none; margin-top: 30px; text-align: left; }
         .leaderboard-list li { 
-            background: #f8f9fa; padding: 25px; margin-bottom: 15px; border-radius: 12px; 
-            display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: 600; transition: var(--transition);
+            background: rgba(255, 255, 255, 0.8); padding: 20px 25px; margin-bottom: 10px; border-radius: 14px; 
+            display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 600; transition: var(--transition);
         }
-        .leaderboard-list li:hover { transform: scale(1.02); }
-        .podium-1 { border-left: 6px solid #FFD700; background: linear-gradient(90deg, rgba(255,215,0,0.1) 0%, rgba(255,255,255,1) 100%) !important;}
-        .podium-2 { border-left: 6px solid #C0C0C0; background: linear-gradient(90deg, rgba(192,192,192,0.1) 0%, rgba(255,255,255,1) 100%) !important;}
-        .podium-3 { border-left: 6px solid #CD7F32; background: linear-gradient(90deg, rgba(205,127,50,0.1) 0%, rgba(255,255,255,1) 100%) !important;}
-        .podium-other { border-left: 6px solid #e1e5eb; }
+        .leaderboard-list li:hover { transform: scale(1.02); background: #fff;}
+        .podium-1 { border-left: 6px solid #FFD700; background: linear-gradient(90deg, rgba(255,215,0,0.1) 0%, rgba(255,255,255,0.8) 100%) !important;}
+        .podium-2 { border-left: 6px solid #C0C0C0; background: linear-gradient(90deg, rgba(192,192,192,0.1) 0%, rgba(255,255,255,0.8) 100%) !important;}
+        .podium-3 { border-left: 6px solid #CD7F32; background: linear-gradient(90deg, rgba(205,127,50,0.1) 0%, rgba(255,255,255,0.8) 100%) !important;}
 
-        @media (max-width: 768px) {
-            .options-grid { grid-template-columns: 1fr; }
-            h1 { font-size: 2.2rem; }
-            .screen { padding: 30px 20px; }
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #333; color: #fff; text-align: center; border-radius: 30px; 
+            padding: 16px; position: fixed; z-index: 100; left: 50%; bottom: 30px; transform: translateX(-50%);
+            font-size: 1rem; opacity: 0; transition: opacity 0.5s, bottom 0.5s;
         }
+        #toast.show { visibility: visible; opacity: 1; bottom: 50px; }
+
+        .sync-loader { border: 5px solid #f3f3f3; border-top: 5px solid var(--primary-color); border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        @media (max-width: 768px) { .options-grid { grid-template-columns: 1fr; } h1 { font-size: 2.2rem; } .screen { padding: 30px 20px; } }
     </style>
 </head>
 <body>
 
+<div id="toast">Bildiriş mətni</div>
+
 <div class="container">
     <div id="login-screen" class="screen active">
         <h1>İnanc və Elm</h1>
-        <p>Kitab əsasında hazırlanmış intellektual müsabiqəyə xoş gəlmisiniz. Yalnız ən yaxşılar liderlər lövhəsinə düşəcək.</p>
-        <input type="text" id="username" placeholder="Ad və Soyadınızı daxil edin" autocomplete="off">
-        <br>
-        <button class="primary-btn" onclick="startGame()">Müsabiqəyə Başla</button>
+        <p>İştirak üçün məlumatları doldurun. Təşkilatçı şifrəni elan etdikdən sonra oyun hər kəs üçün eyni anda başlayacaq.</p>
+        
+        <div class="input-group">
+            <input type="text" id="username" placeholder="Ad və Soyad" autocomplete="off">
+            <input type="number" id="game-pin" placeholder="Oyun Şifrəsi (Məs: 5555)" autocomplete="off">
+        </div>
+        
+        <button class="primary-btn" id="start-btn" disabled onclick="startGame()">Müsabiqəyə Başla</button>
     </div>
 
     <div id="game-screen" class="screen">
@@ -120,8 +130,8 @@
         
         <div class="timer-wrapper">
             <svg width="70" height="70">
-                <circle cx="35" cy="35" r="30" fill="none" stroke="#e1e5eb" stroke-width="4"></circle>
-                <circle id="timer-circle" cx="35" cy="35" r="30" fill="none" stroke="#1a535c" stroke-width="4" stroke-dasharray="188" stroke-dashoffset="0" transform="rotate(-90 35 35)"></circle>
+                <circle cx="35" cy="35" r="30" fill="none" stroke="rgba(0,0,0,0.1)" stroke-width="4"></circle>
+                <circle id="timer-circle" cx="35" cy="35" r="30" fill="none" stroke="#1d1d1f" stroke-width="4" stroke-dasharray="188" stroke-dashoffset="0" transform="rotate(-90 35 35)"></circle>
             </svg>
             <div class="timer-text" id="time-left">15</div>
         </div>
@@ -130,64 +140,116 @@
         <div class="options-grid" id="options-container"></div>
     </div>
 
+    <div id="sync-screen" class="screen">
+        <h1>Əla İşi!</h1>
+        <p>Nəticələriniz bazaya yazılır. Hər kəsin bitirməsi və sıralamanın ədalətli qurulması üçün xahiş edirik gözləyin.</p>
+        <div class="sync-loader"></div>
+        <p style="font-size: 1.5rem; font-weight: bold; color: var(--primary-color);" id="sync-timer-text">10</p>
+    </div>
+
     <div id="leaderboard-screen" class="screen">
-        <h1>Nəticələr</h1>
-        <p id="final-score-text" style="font-size: 1.4rem; font-weight: 600; color: var(--primary-color);"></p>
+        <h1>Yekun Nəticələr</h1>
+        <p id="final-score-text" style="font-size: 1.4rem; font-weight: 600; color: #1d1d1f;"></p>
         <ul class="leaderboard-list" id="leaderboard-data">
-            <li>Nəticələr Excel-dən yüklənir... Zəhmət olmasa gözləyin.</li>
+            <li>Liderlər lövhəsi yüklənir...</li>
         </ul>
-        <button class="primary-btn" style="margin-top: 30px;" onclick="location.reload()">Yenidən Oyna</button>
+        <div style="margin-top: 30px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button class="primary-btn" onclick="location.reload()">Yenidən Başla</button>
+            <button class="primary-btn" style="background-color: #25D366;" onclick="shareResult()">Nəticəni Paylaş</button>
+        </div>
     </div>
 </div>
 
 <script>
-    const questions = [
-        // Asan (10 xal)
-        { q: "Ateizm sözünün fəlsəfi olaraq əsas mənası nədir?", options: ["Tanrıtanımazlıq, Allahı inkar etmək", "Bütün dinləri qəbul etmək", "Təbiətə sitayiş", "Yalnız elmə inanmaq"], a: 0, points: 10 },
-        { q: "Təkamül nəzəriyyəsindən götürülərək cəmiyyətə tətbiq edilən 'güclünün zəifi yox etməsi' prinsipi necə adlanır?", options: ["Humanizm", "Sosial Darvinizm", "Naturalizm", "Deizm"], a: 1, points: 10 },
-        { q: "Kainatdakı möhtəşəm nizam və intizam İslam inancına görə nəyin ən əsas əqli dəlilidir?", options: ["Təsadüflərin", "Allahın təkliyinin (Tövhidin)", "Təbiət qanunlarının", "İnsan zəkasının"], a: 1, points: 10 },
-        { q: "İslama görə insanın bu dünyadakı yaradılış qayəsi nədir?", options: ["Yalnız ibadət etmək", "İmtahan olunmaq", "Təbiəti qorumaq", "Sərvət toplamaq"], a: 1, points: 10 },
-        { q: "Fəlsəfədə zəlzələ, sel fəlakətləri kimi insanın iradəsi xaricində baş verən hadisələr necə adlandırılır?", options: ["Əxlaqi şərlər", "Təbii şərlər", "İlahi cəza", "Sosioloji xaos"], a: 1, points: 10 },
-        { q: "Avropa universitetlərində 600 il əsas kitab kimi oxudulan 'Kitabüş-Şifa' və 'Əl-Qanun fit-Tibb' əsərlərinin müəllifi kimdir?", options: ["İbni Sina", "Əl-Xarəzmi", "İbn Rüşd", "Əl-Biruni"], a: 0, points: 10 },
-        { q: "Sosiologiya elminin təməllərini atan və məşhur 'Müqəddimə' əsərinin müəllifi kimdir?", options: ["İbn Xaldun", "Əl-Cəzəri", "İbn Cəssar", "Əl-Bəlxi"], a: 0, points: 10 },
-
-        // Orta (20 xal)
-        { q: "Deizm fəlsəfi inancının təməl xüsusiyyəti nədir?", options: ["Yaradanı və dinləri qəbul etmək", "Allahı qəbul edib, dinləri və müdaxiləni inkar etmək", "Hər şeyi inkar etmək", "Çoxallahlılığı müdafiə etmək"], a: 1, points: 20 },
-        { q: "Nəcmuddin Ömər Nəsəfiyə görə məxluqatın elm (bilgi) əldə etmə səbəbləri hansılardır?", options: ["Yalnız elm və təcrübə", "İlham, hiss və elm", "Sağlam hisslər, doğru xəbər və ağıl", "Yalnız Quran və Sünnə"], a: 2, points: 20 },
-        { q: "Ateistlərin 'Boşluqların tanrısı' iddialarının mənası nədir?", options: ["Kainatdakı qara dəlikləri Allahın yaratması", "Elmin açıqlaya bilmədiyi yerlərdə Yaradan inancının istifadəsi", "İnsan beynindəki boşluqların tanrı inancı ilə dolması", "Dinlərin elmi boşluqları inkar etməsi"], a: 1, points: 20 },
-        { q: "Xristianlıqda 325-ci ildə rəsmiləşən və Tövhid inancına zidd olan əqidə necə adlanır?", options: ["Panteizm", "Təslis (Üçlük)", "Vəhdəti-Vücud", "Dualizm"], a: 1, points: 20 },
-        { q: "Qanad taxaraq ilk dəfə uçmağa cəhd edən Əndəlüslü alim kimdir?", options: ["Abbas ibn Firnas", "Əl-Cəzəri", "İbni Sina", "Əl-Fərqani"], a: 0, points: 20 },
-        { q: "Bugünkü kibernetika və robototexnikanın əsasını qoyan 'Kitabül-Hiyəl' əsərinin müəllifi kimdir?", options: ["Cabir ibn Həyyan", "Əl-Bəttani", "Əl-Cəzəri", "İbn Avvam"], a: 2, points: 20 },
-        { q: "Yəhudilikdə yəhudi olmayanları 'yük eşşəkləri' adlandıran kitab hansıdır?", options: ["Əhdi-Cədid", "Tövrat", "Zəbur", "Talmud"], a: 3, points: 20 },
-
-        // Çətin (30 xal)
-        { q: "İmam Qəzali 'Əl Munqizu minən daləl' əsərində yəqinliyə (şübhəsiz bilgiyə) necə çatdığını qeyd edir?", options: ["Fəlsəfə oxuyaraq", "Yalnız Uca Allahın qəlbinə axıtdığı bir nur sayəsində", "Təcrübələr apararaq", "Ağılla hər şeyi kəşf edərək"], a: 1, points: 30 },
-        { q: "Rocer Qaraudi 'İslam və insanlığın gələcəyi' əsərində sərvətin bir qütbdə yığılmasının qarşısını almaq üçün nəyi xüsusi vurğulayır?", options: ["Zəkat əmri və faiz qadağası", "Bütün malların dövlətə verilməsi", "Ticarətin qadağan edilməsi", "Yalnız qızıl puldan istifadə"], a: 0, points: 30 },
-        { q: "İslam epistemologiyasında 'mütəvatir xəbər' necə tərif edilir?", options: ["Tək bir şəxsin verdiyi xəbər", "Yalan üzərinə birləşmələri düşünülə bilməyən böyük topluluğun xəbəri", "Alimlərin fərdi rəyi", "Kitablarda yazılan məlumat"], a: 1, points: 30 },
-        { q: "Orta əsrlərdə kilsənin günahları bağışlamaq məqsədi ilə insanlara satdığı qəbzlər necə adlanırdı?", options: ["İndulgensiya", "Vəftiz", "Aforoz", "Yevxaristiya"], a: 0, points: 30 },
-        { q: "Hər şeyin təbii varlıqlardan meydana gəldiyini və fövqəltəbii izahlara inanılmamasını müdafiə edən fəlsəfi cərəyan nədir?", options: ["İdealizm", "Ekzistensializm", "Fəlsəfi naturalizm", "Aqnostisizm"], a: 2, points: 30 },
-        { q: "Qərbdə 'Averroes' kimi tanınan və rahib Hermannın uğrunda oda atıldığı filosof kimdir?", options: ["İbn Rüşd", "İbni Sina", "Əl-Farabi", "Əl-Kindi"], a: 0, points: 30 }
-    ];
-
-    let currentQ = 0;
-    let score = 0;
-    let timer;
-    let timeLeft = 15;
-    let userName = "";
+    // DİQQƏT: Təşkilatçının (Sizin) iştirakçılara elan edəcəyiniz OYUN ŞİFRƏSİ
+    const ADMIN_PIN = "5555"; 
 
     // DİQQƏT: BURAYA YENİ WEB APP URL-Nİ YAZIN
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzuzScuAguN6pMNx48uDSa_9edbWfHsXDx-CLckE72LJ8vq-Js7h5vtsJSiCHR-xEm5Ng/exec"; 
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwsr57tCsstsU_TX-eVoiXe3y1k73hExeeArJWMxZVtPzgcwF8hQZPa3uMUQ6p0RvOONg/exec"; 
+
+    // 20 Sual (3 Asan, 8 Orta, 9 Çətin)
+    let questions = [
+        // --- 3 ASAN SUAL (Hərəsi 10 Xal) ---
+        { q: "Ateizm sözünün fəlsəfi olaraq əsas mənası nədir?", options: ["Tanrıtanımazlıq, Allahı inkar etmək", "Bütün dinləri qəbul etmək", "Təbiətə sitayiş", "Yalnız elmə inanmaq"], a: 0, points: 10 },
+        { q: "İslama görə insanın bu dünyadakı yaradılış qayəsi nədir?", options: ["İmtahan olunmaq", "Yalnız ibadət etmək", "Təbiəti qorumaq", "Sərvət toplamaq"], a: 0, points: 10 },
+        { q: "Fəlsəfədə zəlzələ, sel fəlakətləri kimi insanın iradəsi xaricində baş verən hadisələr necə adlandırılır?", options: ["Təbii şərlər", "Əxlaqi şərlər", "İlahi qəzəb", "Sosioloji xaos"], a: 0, points: 10 },
+
+        // --- 8 ORTA SUAL (Hərəsi 20 Xal) ---
+        { q: "Deizm fəlsəfi inancının təməl xüsusiyyəti nədir?", options: ["Allahı qəbul edib, dinləri və müdaxiləni inkar etmək", "Yaradanı və dinləri eyni anda qəbul etmək", "Hər şeyi inkar etmək", "Çoxallahlılığı müdafiə etmək"], a: 0, points: 20 },
+        { q: "Ateistlərin tez-tez istifadə etdiyi 'Boşluqların tanrısı' (God of gaps) iddiasının mənası nədir?", options: ["Elmin açıqlaya bilmədiyi yerlərdə Yaradan inancının istifadəsi", "Kainatdakı qara dəlikləri Allahın yaratması", "İnsan beynindəki boşluqların tanrı inancı ilə dolması", "Dinlərin elmi boşluqları inkar etməsi"], a: 0, points: 20 },
+        { q: "Xristianlıqda 325-ci ildə rəsmiləşən və Tövhid inancına zidd olan əqidə necə adlanır?", options: ["Təslis (Üçlük)", "Panteizm", "Vəhdəti-Vücud", "Dualizm"], a: 0, points: 20 },
+        { q: "Avropa universitetlərində 600 il əsas kitab kimi oxudulan 'Kitabüş-Şifa' və 'Əl-Qanun fit-Tibb' əsərlərinin müəllifi kimdir?", options: ["İbni Sina", "Əl-Xarəzmi", "İbn Rüşd", "Əl-Biruni"], a: 0, points: 20 },
+        { q: "Sosiologiya elminin təməllərini atan və məşhur 'Müqəddimə' əsərinin müəllifi kimdir?", options: ["İbn Xaldun", "Əl-Cəzəri", "İbn Cəssar", "Əl-Bəlxi"], a: 0, points: 20 },
+        { q: "Bəşər tarixində qanad taxaraq ilk dəfə uçmağa cəhd edən Əndəlüslü alim kimdir?", options: ["Abbas ibn Firnas", "Əl-Cəzəri", "İbni Sina", "Əl-Fərqani"], a: 0, points: 20 },
+        { q: "Bugünkü kibernetika və robototexnikanın əsasını qoyan 'Kitabül-Hiyəl' əsərinin müəllifi kimdir?", options: ["Əl-Cəzəri", "Cabir ibn Həyyan", "Əl-Bəttani", "İbn Avvam"], a: 0, points: 20 },
+        { q: "Yəhudilikdə yəhudi olmayanları 'yük eşşəkləri' adlandıraraq alçaldan kitab hansıdır?", options: ["Talmud", "Əhdi-Cədid", "Tövrat", "Zəbur"], a: 0, points: 20 },
+
+        // --- 9 ÇƏTİN SUAL (Hərəsi 30 Xal) ---
+        { q: "İmam Qəzali 'Əl Munqizu minən daləl' əsərində yəqinliyə (şübhəsiz bilgiyə) necə çatdığını qeyd edir?", options: ["Yalnız Uca Allahın qəlbinə axıtdığı bir nur sayəsində", "Fəlsəfə kitablarını tam oxuyaraq", "Ağılla hər şeyi kəşf edərək", "Riyazi hesablamalarla"], a: 0, points: 30 },
+        { q: "Rocer Qaraudi sərvətin bir qütbdə yığılmasının qarşısını almaq üçün İslamın iqtisadi modelində nəyi xüsusi vurğulayır?", options: ["Zəkat əmri və faiz qadağası", "Bütün malların dövlətə verilməsi", "Ticarətin qadağan edilməsi", "Mütləq bərabərlik prinsipi"], a: 0, points: 30 },
+        { q: "İslam epistemologiyasında 'mütəvatir xəbər' necə tərif edilir?", options: ["Yalan üzərinə birləşmələri düşünülə bilməyən böyük topluluğun xəbəri", "Tək bir şəxsin verdiyi dəqiq xəbər", "Tarixi kitablarda yazılan hər hansı məlumat", "Alimlərin rəyi"], a: 0, points: 30 },
+        { q: "Orta əsrlərdə kilsənin günahları bağışlamaq məqsədi ilə insanlara pulla satdığı qəbzlər necə adlanırdı?", options: ["İndulgensiya", "Vəftiz", "Aforoz", "Yevxaristiya"], a: 0, points: 30 },
+        { q: "Hər şeyin təbii varlıqlardan meydana gəldiyini və fövqəltəbii izahlara (Allaha) inanılmamasını müdafiə edən fəlsəfi cərəyan nədir?", options: ["Fəlsəfi naturalizm", "İdealizm", "Ekzistensializm", "Aqnostisizm"], a: 0, points: 30 },
+        { q: "Qərbdə 'Averroes' kimi tanınan və rasional fikirlərinə görə rahib Hermannın uğrunda oda atıldığı filosof kimdir?", options: ["İbn Rüşd", "İbni Sina", "Əl-Farabi", "Əl-Kindi"], a: 0, points: 30 },
+        { q: "Nəcmuddin Ömər Nəsəfiyə görə məxluqatın elm (bilgi) əldə etməsinin 3 əsas səbəbi hansılardır?", options: ["Sağlam hisslər, doğru xəbər və ağıl", "İlham, hiss və təcrübə", "Yalnız Quran, Sünnə və İcma", "Müşahidə, fəlsəfə və məntiq"], a: 0, points: 30 },
+        { q: "Təkamül nəzəriyyəsindən götürülərək cəmiyyətə tətbiq edilən və 'güclünün zəifi əzməsini' qanuniləşdirən sosioloji cərəyan necə adlanır?", options: ["Sosial Darvinizm", "Radikal Humanizm", "Makiavellizm", "Nihilizm"], a: 0, points: 30 },
+        { q: "Ateizmdə obyektiv və mütləq əxlaqın mümkünsüzlüyü ən çox nə ilə əsaslandırılır?", options: ["Mütləq qanunvericinin (Allahın) və axirətin olmaması ilə", "İnsanların fərqli ölkələrdə yaşaması ilə", "Elmin hələ tam inkişaf etməməsi ilə", "Dövlət qanunlarının zəifliyi ilə"], a: 0, points: 30 }
+    ];
+
+    // İnput Kontrolu (Hər iki xana dolmadan düymə aktiv olmur)
+    const nameInput = document.getElementById("username");
+    const pinInput = document.getElementById("game-pin");
+    const startBtn = document.getElementById("start-btn");
+
+    function validateInputs() {
+        if(nameInput.value.trim().length > 0 && pinInput.value.trim().length > 0) {
+            startBtn.removeAttribute("disabled");
+        } else {
+            startBtn.setAttribute("disabled", "true");
+        }
+    }
+    nameInput.addEventListener("input", validateInputs);
+    pinInput.addEventListener("input", validateInputs);
+
+    let currentQ = 0, score = 0, timer, timeLeft = 15, userName = "";
+
+    function showToast(message) {
+        const toast = document.getElementById("toast");
+        toast.innerText = message;
+        toast.className = "show";
+        setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function randomizeQuestions() {
+        shuffleArray(questions);
+        questions.forEach(q => {
+            let correctAnsText = q.options[q.a];
+            shuffleArray(q.options);
+            q.a = q.options.indexOf(correctAnsText); 
+        });
+    }
 
     function startGame() {
-        const input = document.getElementById("username").value.trim();
-        if(!input) { alert("Zəhmət olmasa adınızı daxil edin."); return; }
-        userName = input;
+        if(pinInput.value !== ADMIN_PIN) {
+            showToast("Oyun şifrəsi yanlışdır! Təşkilatçıdan doğru şifrəni istəyin.");
+            return;
+        }
+
+        userName = nameInput.value.trim();
+        randomizeQuestions(); 
         
         document.getElementById("login-screen").classList.remove("active");
         setTimeout(() => {
             document.getElementById("game-screen").classList.add("active");
             loadQuestion();
-        }, 300);
+        }, 400);
     }
 
     function loadQuestion() {
@@ -226,6 +288,14 @@
         const circle = document.getElementById("timer-circle");
         const dashoffset = 188 - (188 * (timeLeft / 15));
         circle.style.strokeDashoffset = dashoffset;
+        
+        if(timeLeft <= 5) {
+            circle.style.stroke = "var(--accent-color)";
+            document.getElementById("time-left").style.color = "var(--accent-color)";
+        } else {
+            circle.style.stroke = "#1d1d1f";
+            document.getElementById("time-left").style.color = "#1d1d1f";
+        }
     }
 
     function markCorrectAnswer() {
@@ -239,7 +309,6 @@
         clearInterval(timer);
         const correctIndex = questions[currentQ].a;
         const buttons = document.querySelectorAll(".option-btn");
-        
         buttons.forEach(b => b.disabled = true);
         
         if(selectedIndex === correctIndex) {
@@ -262,49 +331,69 @@
                 loadQuestion();
             }, 300);
         } else {
-            endGame();
+            initiateSync();
         }
     }
 
-    function endGame() {
+    // Nəticələrin eyni anda görünməsi üçün Sinxronizasiya funksiyası
+    function initiateSync() {
         document.getElementById("game-screen").classList.remove("active");
         setTimeout(() => {
-            document.getElementById("leaderboard-screen").classList.add("active");
-            document.getElementById("final-score-text").innerText = `Təbriklər ${userName}!\nYekun xalınız: ${score}`;
-            submitScore();
+            document.getElementById("sync-screen").classList.add("active");
+            submitScore(); // Arxa planda xalı Excel-ə göndəririk
+            
+            let syncTime = 10;
+            const syncText = document.getElementById("sync-timer-text");
+            
+            let syncInterval = setInterval(() => {
+                syncTime--;
+                syncText.innerText = syncTime;
+                if(syncTime <= 0) {
+                    clearInterval(syncInterval);
+                    showFinalLeaderboard();
+                }
+            }, 1000);
         }, 300);
     }
 
+    function triggerConfetti() {
+        var duration = 3 * 1000;
+        var end = Date.now() + duration;
+        (function frame() {
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#0071e3', '#34c759', '#FFD700'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#0071e3', '#34c759', '#FFD700'] });
+            if (Date.now() < end) requestAnimationFrame(frame);
+        }());
+    }
+
+    function showFinalLeaderboard() {
+        document.getElementById("sync-screen").classList.remove("active");
+        document.getElementById("leaderboard-screen").classList.add("active");
+        document.getElementById("final-score-text").innerText = `Təbriklər ${userName}!\nYekun xalınız: ${score}`;
+        triggerConfetti();
+        fetchLeaderboard();
+    }
+
     function submitScore() {
+        if(GOOGLE_SCRIPT_URL !== "BURAYA_YENİ_LINKI_YAPISDIRIN") {
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ name: userName, score: score })
+            }).catch(err => console.error("Xəta:", err));
+        }
+    }
+
+    function fetchLeaderboard() {
         if(GOOGLE_SCRIPT_URL === "BURAYA_YENİ_LINKI_YAPISDIRIN") {
             displayLeaderboard([{name: userName, score: score}]);
             return;
         }
-
-        // TƏMİZLƏNMİŞ VƏ CORS XƏTASI ÜÇÜN DÜZƏLDİLMİŞ HİSSƏ
-        fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ name: userName, score: score })
-        }).then(() => {
-            setTimeout(fetchLeaderboard, 2000); 
-        }).catch(err => {
-            console.error("Xəta baş verdi:", err);
-            displayLeaderboard([{name: userName, score: score}]);
-        });
-    }
-
-    function fetchLeaderboard() {
         fetch(GOOGLE_SCRIPT_URL)
             .then(res => res.json())
-            .then(data => {
-                displayLeaderboard(data);
-            })
-            .catch(err => {
-                // Əgər GET yenə işləməsə (no-cors olduğuna görə), heç olmasa cari nəticəni göstər
-                displayLeaderboard([{name: userName, score: score}]);
-            });
+            .then(data => { displayLeaderboard(data); })
+            .catch(err => { displayLeaderboard([{name: userName, score: score}]); });
     }
 
     function displayLeaderboard(data) {
@@ -317,7 +406,7 @@
         }
 
         data.slice(0, 5).forEach((user, index) => {
-            let podiumClass = "podium-other";
+            let podiumClass = "";
             if(index === 0) podiumClass = "podium-1";
             else if(index === 1) podiumClass = "podium-2";
             else if(index === 2) podiumClass = "podium-3";
@@ -325,10 +414,15 @@
             lbContainer.innerHTML += `
                 <li class="${podiumClass}">
                     <span>${index + 1}. ${user.name}</span> 
-                    <span style="color: var(--primary-color);">${user.score} Xal</span>
+                    <span style="color: #1d1d1f;">${user.score} Xal</span>
                 </li>
             `;
         });
+    }
+
+    function shareResult() {
+        const text = encodeURIComponent(`"İnanc və Elm" intellektual müsabiqəsində ${score} xal topladım! Sən neçə xal toplaya bilərsən?`);
+        window.open(`https://api.whatsapp.com/send?text=${text}`);
     }
 </script>
 </body>
