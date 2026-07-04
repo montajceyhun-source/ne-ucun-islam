@@ -174,22 +174,22 @@
     // DİQQƏT: BURAYA YENİ WEB APP URL-Nİ YAZIN
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwsr57tCsstsU_TX-eVoiXe3y1k73hExeeArJWMxZVtPzgcwF8hQZPa3uMUQ6p0RvOONg/exec"; 
 
-    // SƏSLƏR (Səhv səsi ləğv edildi, Taymer gerisayımı səsi əlavə edildi)
+    // BÜTÜN CİHAZLAR ÜÇÜN UNİVERSAL .MP3 SƏSLƏRİ
     const soundCorrect = new Audio("https://www.myinstants.com/media/sounds/correct_1.mp3");
     const soundApplause = new Audio("https://www.myinstants.com/media/sounds/applause-3.mp3");
-    const soundTick = new Audio("https://actions.google.com/sounds/v1/ui/button_click.ogg"); // Zərif taymer (ticking) səsi
+    // Telefonlarda (iPhone/Android) problemsiz işləməsi üçün təmiz MP3 "tick" səsi
+    const soundTick = new Audio("https://www.myinstants.com/media/sounds/tick.mp3"); 
     
     soundCorrect.volume = 0.6;
     soundApplause.volume = 0.7;
-    soundTick.volume = 0.4;
+    // Taymerin səsi istifadəçini yormaması üçün yüngül (0.3) edilib
+    soundTick.volume = 0.3;
 
     let questions = [
-        // --- 3 ASAN SUAL (10 Xal) ---
         { q: "Avropada kilsənin elmi inkişafa mane olması və insanları istismar etməsi hansı fəlsəfi cərəyanın geniş yayılmasına təkan vermişdir?", options: ["Ateizmin", "Panteizmin", "Mistisizmin", "Platonizmin"], a: 0, points: 10 },
         { q: "İslam inancına görə kainatda müşahidə olunan qüsursuz nizam və fiziki qanunlar nəyi sübut edir?", options: ["Allahın varlığını və sonsuz qüdrətini", "Təsadüfi təkamülü", "Kainatın əzəli olduğunu", "Xaos nəzəriyyəsini"], a: 0, points: 10 },
         { q: "İslam fəlsəfəsində xəstəliklər, zəlzələ və sel kimi insan iradəsindən kənar hadisələr hansı anlayışla ifadə olunur?", options: ["Təbii şərlər", "Əxlaqi şərlər", "Mütləq şərlər", "İlahi qəzəb"], a: 0, points: 10 },
 
-        // --- 8 ORTA SUAL (20 Xal) ---
         { q: "Termodinamikanın 2-ci qanununa (Entropiya) əsaslanaraq kainatın əzəli ola bilməyəcəyini sübut edən əsas məntiq nədir?", options: ["Kainatdakı enerjinin nizamsızlığa doğru getməsi və tükənəcəyi", "Maddənin heç vaxt yox olmaması", "Kainatın daim genişlənməsi", "Qara dəliklərin mövcudluğu"], a: 0, points: 20 },
         { q: "Ateistik materializmə görə insan yalnız maddədən ibarətdirsə, bu yanaşma cəmiyyətdə nəyin mütləq (obyektiv) varlığını inkar edir?", options: ["Obyektiv əxlaq qanunlarının", "Bioloji təkamülün", "İqtisadi inkişafın", "Fiziki qanunların"], a: 0, points: 20 },
         { q: "İslam epistemologiyasına (bilgi nəzəriyyəsinə) görə aşağıdakılardan hansı qəti (obyektiv) məlumat mənbəyi sayılmır?", options: ["İlham və ya yuxu", "Sağlam hisslər", "Ağıl", "Mütəvatir xəbər"], a: 0, points: 20 },
@@ -199,7 +199,6 @@
         { q: "Təkamül nəzəriyyəsini insan cəmiyyətlərinə tətbiq edərək 'zəif irqlərin' məhv edilməsini qanuniləşdirən sosioloji fəlsəfə nədir?", options: ["Sosial Darvinizm", "Humanizm", "Ekzistensializm", "Sekulyarizm"], a: 0, points: 20 },
         { q: "Quranın bəşər sözü olmadığını isbat etmək üçün İslam alimlərinin ən çox müraciət etdiyi dəlil ('İcaz-ul Quran') nədir?", options: ["Quranın ona bənzər bir mətn gətirməyə çağırması və heç kimin bunu edə bilməməsi", "Quranın çox qısa və anlaşıqlı olması", "Quranın fərqli dillərə tərcümə edilməsi", "Quranın yalnız qanunlardan ibarət olması"], a: 0, points: 20 },
 
-        // --- 9 ÇƏTİN SUAL (30 Xal) ---
         { q: "İslam əqaidində 'Yalan üzərində birləşmələri əqlən mümkün olmayan böyük bir topluluğun nəql etdiyi xəbər' necə adlanır?", options: ["Mütəvatir xəbər", "Ahad xəbər", "Zənni xəbər", "Mürsəl xəbər"], a: 0, points: 30 },
         { q: "İmam Qəzali 'Əl-Munqizu minəd-daləl' əsərində duyğu orqanlarının və ağlın da yanılda biləcəyini anladıqdan sonra mütləq yəqinliyə necə çatmışdır?", options: ["Yalnız Allahın qəlbinə atdığı bir nur (işığ) sayəsində", "Qədim yunan fəlsəfəsini dərindən öyrənərək", "Yeni fizika qanunlarını kəşf edərək", "Çoxlu kitab mütaliə edərək"], a: 0, points: 30 },
         { q: "Yəhudi ənənəsində yazılı Tövratdan əlavə olaraq şifahi keçən və yəhudi olmayanlara ('qoyim') qarşı sərt müddəalar ehtiva edən mətn hansıdır?", options: ["Talmud", "İncil", "Zəbur", "Mişna"], a: 0, points: 30 },
@@ -260,10 +259,10 @@
         userName = nameInput.value.trim();
         randomizeQuestions(); 
         
-        // Brauzer səsləri bloklamasın deyə səssizcə başladırıq
-        soundCorrect.play().catch(()=>{}); soundCorrect.pause(); soundCorrect.currentTime = 0;
-        soundTick.play().catch(()=>{}); soundTick.pause(); soundTick.currentTime = 0;
-        soundApplause.play().catch(()=>{}); soundApplause.pause(); soundApplause.currentTime = 0;
+        // Brauzerlərdə (iPhone Safari) səsin aktiv olması üçün məcburi yükləmə
+        soundCorrect.load();
+        soundTick.load();
+        soundApplause.load();
         
         document.getElementById("login-screen").classList.remove("active");
         setTimeout(() => {
@@ -293,14 +292,16 @@
             optsContainer.appendChild(btn);
         });
 
+        // Saniyəölçən (Taymer)
         timer = setInterval(() => {
             timeLeft--;
             updateTimerUI();
             
-            // Hər saniyə vuran taymer səsi
+            // Hər saniyə vuran səs (Klonlama sayəsində kəsilmə baş vermir)
             if(timeLeft > 0) {
-                soundTick.currentTime = 0;
-                soundTick.play().catch(()=>{});
+                let tickClone = soundTick.cloneNode();
+                tickClone.volume = 0.3;
+                tickClone.play().catch(()=>{});
             }
 
             if(timeLeft <= 0) {
@@ -341,13 +342,13 @@
         buttons.forEach(b => b.disabled = true);
 
         if(userSelectedIndex === correctIndex) {
-            // DOĞRU CAVAB - Yaşıl rəng və Uğur səsi
+            // DOĞRU CAVAB - Uğur səsi gəlir
             if(userSelectedIndex !== -1) buttons[userSelectedIndex].classList.add("correct");
             score += questions[currentQ].points;
             document.getElementById("score-counter").innerText = `Xal: ${score}`;
             soundCorrect.play().catch(e => console.log(e)); 
         } else {
-            // SƏHV CAVAB - Yalnız vizual rəng (Səs yoxdur)
+            // SƏHV VƏ YA BOŞ CAVAB - Səs ləğv edildi, yalnız rəng dəyişir
             if(userSelectedIndex !== -1) {
                 buttons[userSelectedIndex].classList.add("wrong");
             }
@@ -403,7 +404,6 @@
         document.getElementById("leaderboard-screen").classList.add("active");
         document.getElementById("final-score-text").innerText = `Təbriklər ${userName}!\nYekun xalınız: ${score}`;
         
-        // Oyun bitdi: Konfeti və ALQIŞ SƏSİ!
         triggerConfetti();
         soundApplause.play().catch(e => console.log(e));
         
