@@ -174,15 +174,14 @@
     // DİQQƏT: BURAYA YENİ WEB APP URL-Nİ YAZIN
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwsr57tCsstsU_TX-eVoiXe3y1k73hExeeArJWMxZVtPzgcwF8hQZPa3uMUQ6p0RvOONg/exec"; 
 
-    // Səs fayllarının əlavə edilməsi (Açıq və stabil mənbələrdən istifadə edilib)
+    // SƏSLƏR (Səhv səsi ləğv edildi, Taymer gerisayımı səsi əlavə edildi)
     const soundCorrect = new Audio("https://www.myinstants.com/media/sounds/correct_1.mp3");
-    const soundWrong = new Audio("https://www.myinstants.com/media/sounds/wrong-answer.mp3");
     const soundApplause = new Audio("https://www.myinstants.com/media/sounds/applause-3.mp3");
+    const soundTick = new Audio("https://actions.google.com/sounds/v1/ui/button_click.ogg"); // Zərif taymer (ticking) səsi
     
-    // Səslərin səs səviyyəsini (volume) tənzimləmək (1 = 100%, 0.5 = 50%)
     soundCorrect.volume = 0.6;
-    soundWrong.volume = 0.5;
     soundApplause.volume = 0.7;
+    soundTick.volume = 0.4;
 
     let questions = [
         // --- 3 ASAN SUAL (10 Xal) ---
@@ -261,9 +260,9 @@
         userName = nameInput.value.trim();
         randomizeQuestions(); 
         
-        // Səsləri brauzer xətasız (autoplay bloku olmadan) işlədə bilsin deyə burada səssizcə başladırıq
+        // Brauzer səsləri bloklamasın deyə səssizcə başladırıq
         soundCorrect.play().catch(()=>{}); soundCorrect.pause(); soundCorrect.currentTime = 0;
-        soundWrong.play().catch(()=>{}); soundWrong.pause(); soundWrong.currentTime = 0;
+        soundTick.play().catch(()=>{}); soundTick.pause(); soundTick.currentTime = 0;
         soundApplause.play().catch(()=>{}); soundApplause.pause(); soundApplause.currentTime = 0;
         
         document.getElementById("login-screen").classList.remove("active");
@@ -297,6 +296,13 @@
         timer = setInterval(() => {
             timeLeft--;
             updateTimerUI();
+            
+            // Hər saniyə vuran taymer səsi
+            if(timeLeft > 0) {
+                soundTick.currentTime = 0;
+                soundTick.play().catch(()=>{});
+            }
+
             if(timeLeft <= 0) {
                 clearInterval(timer);
                 evaluateAndShowAnswer(); 
@@ -335,18 +341,17 @@
         buttons.forEach(b => b.disabled = true);
 
         if(userSelectedIndex === correctIndex) {
-            // DOĞRU CAVAB - Xal artır, düymə yaşıl olur və düzgün cavab səsi çalınır
+            // DOĞRU CAVAB - Yaşıl rəng və Uğur səsi
             if(userSelectedIndex !== -1) buttons[userSelectedIndex].classList.add("correct");
             score += questions[currentQ].points;
             document.getElementById("score-counter").innerText = `Xal: ${score}`;
-            soundCorrect.play().catch(e => console.log(e)); // Səs oynat
+            soundCorrect.play().catch(e => console.log(e)); 
         } else {
-            // SƏHV CAVAB - Seçilən qırmızı olur, doğru olan yaşıl olur və xəta səsi çalınır
+            // SƏHV CAVAB - Yalnız vizual rəng (Səs yoxdur)
             if(userSelectedIndex !== -1) {
                 buttons[userSelectedIndex].classList.add("wrong");
             }
             buttons[correctIndex].classList.add("correct");
-            soundWrong.play().catch(e => console.log(e)); // Səs oynat
         }
     }
 
