@@ -71,9 +71,8 @@
             padding: 18px; border-radius: 16px; font-size: 1.05rem; text-align: left; 
             cursor: pointer; transition: var(--transition); line-height: 1.4; box-shadow: 0 4px 6px rgba(0,0,0,0.03);
         }
-        /* Yeni: Seçilmiş düymə stili */
-        .option-btn.selected { border: 3px solid var(--primary-color); transform: scale(0.98); background-color: #f0f7ff; }
         
+        .option-btn.selected { border: 3px solid var(--primary-color); transform: scale(0.98); background-color: #f0f7ff; }
         .option-btn:hover:not(:disabled) { background-color: #fff; border-color: #ddd; transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.08); }
         .option-btn.correct { background-color: var(--success-color); color: white; border-color: var(--success-color); }
         .option-btn.wrong { background-color: var(--accent-color); color: white; border-color: var(--accent-color); }
@@ -175,6 +174,16 @@
     // DİQQƏT: BURAYA YENİ WEB APP URL-Nİ YAZIN
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwsr57tCsstsU_TX-eVoiXe3y1k73hExeeArJWMxZVtPzgcwF8hQZPa3uMUQ6p0RvOONg/exec"; 
 
+    // Səs fayllarının əlavə edilməsi (Açıq və stabil mənbələrdən istifadə edilib)
+    const soundCorrect = new Audio("https://www.myinstants.com/media/sounds/correct_1.mp3");
+    const soundWrong = new Audio("https://www.myinstants.com/media/sounds/wrong-answer.mp3");
+    const soundApplause = new Audio("https://www.myinstants.com/media/sounds/applause-3.mp3");
+    
+    // Səslərin səs səviyyəsini (volume) tənzimləmək (1 = 100%, 0.5 = 50%)
+    soundCorrect.volume = 0.6;
+    soundWrong.volume = 0.5;
+    soundApplause.volume = 0.7;
+
     let questions = [
         // --- 3 ASAN SUAL (10 Xal) ---
         { q: "Avropada kilsənin elmi inkişafa mane olması və insanları istismar etməsi hansı fəlsəfi cərəyanın geniş yayılmasına təkan vermişdir?", options: ["Ateizmin", "Panteizmin", "Mistisizmin", "Platonizmin"], a: 0, points: 10 },
@@ -218,7 +227,7 @@
     pinInput.addEventListener("input", validateInputs);
 
     let currentQ = 0, score = 0, timer, timeLeft = 15, userName = "";
-    let userSelectedIndex = -1; // İştirakçının seçdiyi cavabı yadda saxlamaq üçün
+    let userSelectedIndex = -1; 
 
     function showToast(message) {
         const toast = document.getElementById("toast");
@@ -252,6 +261,11 @@
         userName = nameInput.value.trim();
         randomizeQuestions(); 
         
+        // Səsləri brauzer xətasız (autoplay bloku olmadan) işlədə bilsin deyə burada səssizcə başladırıq
+        soundCorrect.play().catch(()=>{}); soundCorrect.pause(); soundCorrect.currentTime = 0;
+        soundWrong.play().catch(()=>{}); soundWrong.pause(); soundWrong.currentTime = 0;
+        soundApplause.play().catch(()=>{}); soundApplause.pause(); soundApplause.currentTime = 0;
+        
         document.getElementById("login-screen").classList.remove("active");
         setTimeout(() => {
             document.getElementById("game-screen").classList.add("active");
@@ -262,7 +276,7 @@
     function loadQuestion() {
         clearInterval(timer);
         timeLeft = 15;
-        userSelectedIndex = -1; // Yeni sualda seçimi sıfırlayırıq
+        userSelectedIndex = -1; 
         updateTimerUI();
         
         const qData = questions[currentQ];
@@ -276,19 +290,17 @@
             const btn = document.createElement("button");
             btn.className = "option-btn";
             btn.innerText = opt;
-            // Kliklənəndə cavabı yoxlamır, sadəcə qeydə alır və düymələri kilidləyir
             btn.onclick = () => selectAnswer(index, btn);
             optsContainer.appendChild(btn);
         });
 
-        // Taymer eyni anda hamı üçün işləyir və MÜTLƏQ sıfıra qədər gedir
         timer = setInterval(() => {
             timeLeft--;
             updateTimerUI();
             if(timeLeft <= 0) {
                 clearInterval(timer);
-                evaluateAndShowAnswer(); // Vaxt bitəndə nəticəni göstər
-                setTimeout(nextQuestion, 2000); // Və 2 saniyə sonra digər suala keç
+                evaluateAndShowAnswer(); 
+                setTimeout(nextQuestion, 2000); 
             }
         }, 1000);
     }
@@ -308,32 +320,33 @@
         }
     }
 
-    // Cavab seçiləndə işləyən yeni funksiya
     function selectAnswer(selectedIndex, btn) {
-        userSelectedIndex = selectedIndex; // Seçimi yadda saxla
+        userSelectedIndex = selectedIndex; 
         const buttons = document.querySelectorAll(".option-btn");
-        buttons.forEach(b => b.disabled = true); // Digər variantları kilidlə
-        btn.classList.add("selected"); // Seçilmiş variantı rənglə
+        buttons.forEach(b => b.disabled = true); 
+        btn.classList.add("selected"); 
         showToast("Cavabınız qeydə alındı, vaxtın bitməsini gözləyin...");
     }
 
-    // Vaxt bitəndə işləyən funksiya
     function evaluateAndShowAnswer() {
         const correctIndex = questions[currentQ].a;
         const buttons = document.querySelectorAll(".option-btn");
         
-        // Əgər vaxt bitənə qədər heç nə seçilməyibsə, düymələri kilidlə
         buttons.forEach(b => b.disabled = true);
 
         if(userSelectedIndex === correctIndex) {
+            // DOĞRU CAVAB - Xal artır, düymə yaşıl olur və düzgün cavab səsi çalınır
             if(userSelectedIndex !== -1) buttons[userSelectedIndex].classList.add("correct");
             score += questions[currentQ].points;
             document.getElementById("score-counter").innerText = `Xal: ${score}`;
+            soundCorrect.play().catch(e => console.log(e)); // Səs oynat
         } else {
+            // SƏHV CAVAB - Seçilən qırmızı olur, doğru olan yaşıl olur və xəta səsi çalınır
             if(userSelectedIndex !== -1) {
                 buttons[userSelectedIndex].classList.add("wrong");
             }
             buttons[correctIndex].classList.add("correct");
+            soundWrong.play().catch(e => console.log(e)); // Səs oynat
         }
     }
 
@@ -384,7 +397,11 @@
         document.getElementById("sync-screen").classList.remove("active");
         document.getElementById("leaderboard-screen").classList.add("active");
         document.getElementById("final-score-text").innerText = `Təbriklər ${userName}!\nYekun xalınız: ${score}`;
+        
+        // Oyun bitdi: Konfeti və ALQIŞ SƏSİ!
         triggerConfetti();
+        soundApplause.play().catch(e => console.log(e));
+        
         fetchLeaderboard();
     }
 
