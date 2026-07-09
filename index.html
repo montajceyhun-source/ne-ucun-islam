@@ -171,10 +171,10 @@
 
 <script>
     const ADMIN_PIN = "2222"; 
-    // DİQQƏT: BURAYA YENİ WEB APP URL-Nİ YAZIN
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwsr57tCsstsU_TX-eVoiXe3y1k73hExeeArJWMxZVtPzgcwF8hQZPa3uMUQ6p0RvOONg/exec"; 
+    
+    // DİQQƏT: Apps Script-dən aldığınız YENİ URL-i BURAYA YAPIŞDIRIN
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz27Jt5Ltkqo8_uZMgMS6qSS3tCyusUPk-1nvOU169G69oWY5B-zM_ufw0eVeFWe8P87w/exec"; 
 
-    // BÜTÜN SƏSLƏR (Formatları bütün cihazlar üçün uyğunlaşdırılıb)
     const soundCorrect = new Audio("https://www.myinstants.com/media/sounds/correct_1.mp3");
     const soundApplause = new Audio("https://www.myinstants.com/media/sounds/applause-3.mp3");
     const soundTick = new Audio("https://www.myinstants.com/media/sounds/tick.mp3"); 
@@ -187,7 +187,6 @@
         { q: "Avropada kilsənin elmi inkişafa mane olması və insanları istismar etməsi hansı fəlsəfi cərəyanın geniş yayılmasına təkan vermişdir?", options: ["Ateizmin", "Panteizmin", "Mistisizmin", "Platonizmin"], a: 0, points: 10 },
         { q: "İslam inancına görə kainatda müşahidə olunan qüsursuz nizam və fiziki qanunlar nəyi sübut edir?", options: ["Allahın varlığını və sonsuz qüdrətini", "Təsadüfi təkamülü", "Kainatın əzəli olduğunu", "Xaos nəzəriyyəsini"], a: 0, points: 10 },
         { q: "İslam fəlsəfəsində xəstəliklər, zəlzələ və sel kimi insan iradəsindən kənar hadisələr hansı anlayışla ifadə olunur?", options: ["Təbii şərlər", "Əxlaqi şərlər", "Mütləq şərlər", "İlahi qəzəb"], a: 0, points: 10 },
-
         { q: "Termodinamikanın 2-ci qanununa (Entropiya) əsaslanaraq kainatın əzəli ola bilməyəcəyini sübut edən əsas məntiq nədir?", options: ["Kainatdakı enerjinin nizamsızlığa doğru getməsi və tükənəcəyi", "Maddənin heç vaxt yox olmaması", "Kainatın daim genişlənməsi", "Qara dəliklərin mövcudluğu"], a: 0, points: 20 },
         { q: "Ateistik materializmə görə insan yalnız maddədən ibarətdirsə, bu yanaşma cəmiyyətdə nəyin mütləq (obyektiv) varlığını inkar edir?", options: ["Obyektiv əxlaq qanunlarının", "Bioloji təkamülün", "İqtisadi inkişafın", "Fiziki qanunların"], a: 0, points: 20 },
         { q: "İslam epistemologiyasına (bilgi nəzəriyyəsinə) görə aşağıdakılardan hansı qəti (obyektiv) məlumat mənbəyi sayılmır?", options: ["İlham və ya yuxu", "Sağlam hisslər", "Ağıl", "Mütəvatir xəbər"], a: 0, points: 20 },
@@ -196,12 +195,11 @@
         { q: "Avropanın qaranlıq dövr yaşadığı bir vaxtda, müsəlmanların İspaniyada qurduğu və Qərb Renessansına təsir edən mədəniyyət mərkəzi haradır?", options: ["Əndəlüs", "Babil", "İsgəndəriyyə", "Konstantinopol"], a: 0, points: 20 },
         { q: "Təkamül nəzəriyyəsini insan cəmiyyətlərinə tətbiq edərək 'zəif irqlərin' məhv edilməsini qanuniləşdirən sosioloji fəlsəfə nədir?", options: ["Sosial Darvinizm", "Humanizm", "Ekzistensializm", "Sekulyarizm"], a: 0, points: 20 },
         { q: "Quranın bəşər sözü olmadığını isbat etmək üçün İslam alimlərinin ən çox müraciət etdiyi dəlil ('İcaz-ul Quran') nədir?", options: ["Quranın ona bənzər bir mətn gətirməyə çağırması və heç kimin bunu edə bilməməsi", "Quranın çox qısa və anlaşıqlı olması", "Quranın fərqli dillərə tərcümə edilməsi", "Quranın yalnız qanunlardan ibarət olması"], a: 0, points: 20 },
-
         { q: "İslam əqaidində 'Yalan üzərində birləşmələri əqlən mümkün olmayan böyük bir topluluğun nəql etdiyi xəbər' necə adlanır?", options: ["Mütəvatir xəbər", "Ahad xəbər", "Zənni xəbər", "Mürsəl xəbər"], a: 0, points: 30 },
         { q: "İmam Qəzali 'Əl-Munqizu minəd-daləl' əsərində duyğu orqanlarının və ağlın da yanılda biləcəyini anladıqdan sonra mütləq yəqinliyə necə çatmışdır?", options: ["Yalnız Allahın qəlbinə atdığı bir nur (işığ) sayəsində", "Qədim yunan fəlsəfəsini dərindən öyrənərək", "Yeni fizika qanunlarını kəşf edərək", "Çoxlu kitab mütaliə edərək"], a: 0, points: 30 },
         { q: "Yəhudi ənənəsində yazılı Tövratdan əlavə olaraq şifahi keçən və yəhudi olmayanlara ('qoyim') qarşı sərt müddəalar ehtiva edən mətn hansıdır?", options: ["Talmud", "İncil", "Zəbur", "Mişna"], a: 0, points: 30 },
         { q: "Fransız mütəfəkkiri Rocer Qaraudi kapitalizmin ədalətsiz qütbləşməsinin qarşısını almaq üçün Quranın hansı iki prinsipini vurğulayır?", options: ["Zəkatın fərz olması və faizin qadağan edilməsi", "Qızıl standartı və sərbəst ticarət", "Bütün mülkiyyətin dövlətləşdirilməsi", "Yalnız kənd təsərrüfatına vergi qoyulması"], a: 0, points: 30 },
-        { q: "Hazırda Qərb elmində hökmranlıq edən və kainatdakı hər şeyin ancaq təbii səbəblərlə açıqlanmalı olduğunu iddia edən çərçivə necə adlanır?", options: ["Metodoloji Naturalizm", "İdealizm", "Panteizm", "Aqnostisizm"], a: 0, points: 30 },
+        { q: "Hazırda Qərb elmində hökmranlıq edən və kainatdakı hər şeyin ancaq təbii səbəblərlə açıqlanmalı olduğunu iddia edən çərçivə necə adlanır?", options: ["Metodoloji Naturalizm", "İidealizm", "Panteizm", "Aqnostisizm"], a: 0, points: 30 },
         { q: "Orta əsrlərdə kilsə xadimlərinin insanları istismar etmək üçün cənnətdən yer (günahların pulla bağışlanması) satması tarixdə necə adlanırdı?", options: ["İndulgensiya", "Aforoz", "Engvizisiya", "Yevxaristiya"], a: 0, points: 30 },
         { q: "Kibernetikanın atası hesab olunan, su saatları və mürəkkəb avtomat maşınlar icad edən, 'Kitabül-Hiyəl'in müəllifi olan mühəndis kimdir?", options: ["Əl-Cəzəri", "Cabir ibn Həyyan", "İbn əl-Heysəm", "Əl-Bətani"], a: 0, points: 30 },
         { q: "Materialist fəlsəfədə təbiətdə güclünün zəifi yeməsi 'təbii seçmə' kimi qəbul edilirsə, cəmiyyətdə bunun məntiqi nəticəsi olaraq hansı anlayış mənasını itirir?", options: ["Ədalət və zülm anlayışları", "Qravitasiya qanunu", "Riyazi formullar", "Bioloji çoxalma"], a: 0, points: 30 },
@@ -248,11 +246,10 @@
         });
     }
 
-    // ƏN VACİB HİSSƏ: Brauzerləri məcbur edirik ki, istifadəçi düyməyə basanda bütün səsləri "Kiliddən çıxarsın"
     function unlockAudio() {
         const audios = [soundCorrect, soundApplause, soundTick];
         audios.forEach(a => {
-            a.volume = 0; // Səssizcə başladırıq ki, eşidilməsin
+            a.volume = 0;
             let playPromise = a.play();
             if (playPromise !== undefined) {
                 playPromise.then(_ => {
@@ -261,7 +258,6 @@
                 }).catch(error => {});
             }
         });
-        // Səs səviyyələrini əvvəlki halına qaytarırıq
         soundCorrect.volume = 0.6;
         soundApplause.volume = 0.7;
         soundTick.volume = 0.3;
@@ -276,7 +272,6 @@
         userName = nameInput.value.trim();
         randomizeQuestions(); 
         
-        // Səsləri kiliddən çıxarırıq (Xüsusilə iPhone və Chrome üçün)
         unlockAudio();
         
         document.getElementById("login-screen").classList.remove("active");
@@ -311,7 +306,6 @@
             timeLeft--;
             updateTimerUI();
             
-            // Hər saniyə vuran səs (Artıq kopyalama - cloneNode yoxdur!)
             if(timeLeft > 0) {
                 soundTick.currentTime = 0;
                 let playPromise = soundTick.play();
@@ -427,33 +421,41 @@
         fetchLeaderboard();
     }
 
+    // YENILENMIŞ: CORS xətası olmadan məlumat göndərən funksiya
     function submitScore() {
-        if(GOOGLE_SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbwsr57tCsstsU_TX-eVoiXe3y1k73hExeeArJWMxZVtPzgcwF8hQZPa3uMUQ6p0RvOONg/exec") {
-            fetch(GOOGLE_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ name: userName, score: score })
-            }).catch(err => {});
+        if(GOOGLE_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbz27Jt5Ltkqo8_uZMgMS6qSS3tCyusUPk-1nvOU169G69oWY5B-zM_ufw0eVeFWe8P87w/exec") {
+            console.error("Xəta: GOOGLE_SCRIPT_URL əlavə edilməyib!");
+            return;
         }
+
+        fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ name: userName, score: score })
+        }).catch(err => console.error("Göndərmə xətası:", err));
     }
 
+    // YENILENMIŞ: Məlumatları düzgün çəkən funksiya
     function fetchLeaderboard() {
-        if(GOOGLE_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbwsr57tCsstsU_TX-eVoiXe3y1k73hExeeArJWMxZVtPzgcwF8hQZPa3uMUQ6p0RvOONg/exec") {
+        if(GOOGLE_SCRIPT_URL === "https://script.google.com/macros/s/AKfycbz27Jt5Ltkqo8_uZMgMS6qSS3tCyusUPk-1nvOU169G69oWY5B-zM_ufw0eVeFWe8P87w/exec") {
             displayLeaderboard([{name: userName, score: score}]);
             return;
         }
+        
         fetch(GOOGLE_SCRIPT_URL)
             .then(res => res.json())
             .then(data => { displayLeaderboard(data); })
-            .catch(err => { displayLeaderboard([{name: userName, score: score}]); });
+            .catch(err => { 
+                console.error("Çəkmə xətası:", err);
+                displayLeaderboard([{name: userName, score: score}]); 
+            });
     }
 
     function displayLeaderboard(data) {
         const lbContainer = document.getElementById("leaderboard-data");
         lbContainer.innerHTML = "";
         
-        if (data.length === 0) {
+        if (!data || data.length === 0) {
             lbContainer.innerHTML = "<li>Hələlik nəticə yoxdur.</li>";
             return;
         }
